@@ -1,2 +1,0 @@
-- Shows active links as tabs
-- Shows only profiles with active links

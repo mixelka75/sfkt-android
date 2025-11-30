@@ -1,1 +1,0 @@
-- libXray: fix coreServer is always nil

@@ -1,1 +1,0 @@
-- Allow profile change while the app is in start mode

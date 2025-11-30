@@ -1,3 +1,0 @@
-- New Settings:
-- ++ GeoIP Address
-- ++ GeoSite Address

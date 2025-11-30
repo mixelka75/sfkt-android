@@ -1,1 +1,0 @@
-- Downgrade AGP to v8.11.1 to fix F-Droid build issue (#74)

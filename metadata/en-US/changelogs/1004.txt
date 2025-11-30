@@ -1,2 +1,0 @@
-- New setting: Tun2socks
-- TPROXY: Bypass NTP

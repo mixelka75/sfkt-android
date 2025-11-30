@@ -1,2 +1,0 @@
-- Xray-core: v25.9.5
-- Customize tun routes (#71)

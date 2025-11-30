@@ -1,2 +1,0 @@
-- Split settings: Basic and Advanced
-- Advanced settings are hidden by default

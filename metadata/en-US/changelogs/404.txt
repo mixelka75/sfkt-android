@@ -1,1 +1,0 @@
-- Prevent slash character escaping on importing profile via link (Fix #31)

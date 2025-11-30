@@ -1,3 +1,0 @@
-- New experimental feature for root users: Transparent Proxy Support!
-- TPROXY Auto Connect
-- TPROXY Bypass WiFi
