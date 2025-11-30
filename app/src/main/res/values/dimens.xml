@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Card stroke widths -->
+    <dimen name="card_stroke_default">1dp</dimen>
+    <dimen name="card_stroke_selected">2dp</dimen>
+
+    <!-- Corner radii -->
+    <dimen name="corner_small">8dp</dimen>
+    <dimen name="corner_medium">16dp</dimen>
+    <dimen name="corner_large">20dp</dimen>
+    <dimen name="corner_extra_large">28dp</dimen>
+
+    <!-- Spacing -->
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">16dp</dimen>
+    <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+
+    <!-- Icon sizes -->
+    <dimen name="icon_small">20dp</dimen>
+    <dimen name="icon_medium">24dp</dimen>
+    <dimen name="icon_large">48dp</dimen>
+
+    <!-- Button heights -->
+    <dimen name="button_height_small">40dp</dimen>
+    <dimen name="button_height_medium">48dp</dimen>
+    <dimen name="button_height_large">56dp</dimen>
+
+    <!-- Connect button size -->
+    <dimen name="connect_button_size">140dp</dimen>
+    <dimen name="connect_ring_inner">180dp</dimen>
+    <dimen name="connect_ring_outer">200dp</dimen>
+</resources>

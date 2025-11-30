@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Background circle -->
+    <path
+        android:fillColor="#6200EE"
+        android:pathData="M54,54m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0"/>
+    <!-- Shield/VPN icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,24L30,34v16c0,14.52 10.24,28.12 24,31.2 13.76,-3.08 24,-16.68 24,-31.2V34L54,24zM54,54.5h18c-1.38,9.86 -8.34,18.56 -18,21.3V54.5H36V37.5l18,-8v25z"/>
+</vector>

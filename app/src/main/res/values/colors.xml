@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material You Color Tokens (Light Theme) -->
+    <!-- Primary - Vibrant Blue -->
+    <color name="md_theme_primary">#0061A4</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#D1E4FF</color>
+    <color name="md_theme_onPrimaryContainer">#001D36</color>
+
+    <!-- Secondary - Teal/Cyan -->
+    <color name="md_theme_secondary">#006874</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#97F0FF</color>
+    <color name="md_theme_onSecondaryContainer">#001F24</color>
+
+    <!-- Tertiary - Warm Violet -->
+    <color name="md_theme_tertiary">#6B5778</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#F3DAFF</color>
+    <color name="md_theme_onTertiaryContainer">#251431</color>
+
+    <!-- Error -->
+    <color name="md_theme_error">#BA1A1A</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_errorContainer">#FFDAD6</color>
+    <color name="md_theme_onErrorContainer">#410002</color>
+
+    <!-- Background & Surface -->
+    <color name="md_theme_background">#FDFCFF</color>
+    <color name="md_theme_onBackground">#1A1C1E</color>
+    <color name="md_theme_surface">#FDFCFF</color>
+    <color name="md_theme_onSurface">#1A1C1E</color>
+
+    <!-- Surface Variants -->
+    <color name="md_theme_surfaceVariant">#DFE2EB</color>
+    <color name="md_theme_onSurfaceVariant">#43474E</color>
+    <color name="md_theme_outline">#73777F</color>
+    <color name="md_theme_outlineVariant">#C3C7CF</color>
+
+    <!-- Inverse -->
+    <color name="md_theme_inverseSurface">#2F3033</color>
+    <color name="md_theme_inverseOnSurface">#F1F0F4</color>
+    <color name="md_theme_inversePrimary">#9ECAFF</color>
+
+    <!-- Surface Tint & Scrim -->
+    <color name="md_theme_surfaceTint">#0061A4</color>
+    <color name="md_theme_scrim">#000000</color>
+
+    <!-- Surface Containers (Material 3) -->
+    <color name="md_theme_surfaceContainerLowest">#FFFFFF</color>
+    <color name="md_theme_surfaceContainerLow">#F7F2FA</color>
+    <color name="md_theme_surfaceContainer">#F1ECF4</color>
+    <color name="md_theme_surfaceContainerHigh">#EBE6EE</color>
+    <color name="md_theme_surfaceContainerHighest">#E5E1E9</color>
+
+    <!-- Status Colors - Vibrant -->
+    <color name="status_connected">#00C853</color>
+    <color name="status_connecting">#FF9100</color>
+    <color name="status_disconnected">#757575</color>
+    <color name="status_error">#FF1744</color>
+
+    <!-- Ping Colors -->
+    <color name="ping_good">#00E676</color>
+    <color name="ping_medium">#FFAB00</color>
+    <color name="ping_bad">#FF5252</color>
+
+    <!-- Connect Button State Colors -->
+    <color name="connect_button_disconnected">#0061A4</color>
+    <color name="connect_button_connecting">#FF9100</color>
+    <color name="connect_button_connected">#00C853</color>
+
+    <!-- Ring Colors -->
+    <color name="ring_disconnected">#C3C7CF</color>
+    <color name="ring_connecting">#FF9100</color>
+    <color name="ring_connected">#00C853</color>
+
+    <!-- Legacy colors for compatibility -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#FF0061A4</color>
+</resources>

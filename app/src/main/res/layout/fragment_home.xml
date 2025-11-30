@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipeRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <!-- Connection Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+                <!-- Connect Button with Rings -->
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <!-- Outer Glow Ring -->
+                    <View
+                        android:id="@+id/connectRingOuter"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_gravity="center"
+                        android:alpha="0.3"
+                        android:background="@drawable/bg_connect_ring"/>
+
+                    <!-- Inner Ring -->
+                    <View
+                        android:id="@+id/connectRing"
+                        android:layout_width="126dp"
+                        android:layout_height="126dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_connect_ring"/>
+
+                    <!-- Connect Button -->
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnConnect"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        app:fabCustomSize="100dp"
+                        app:maxImageSize="40dp"
+                        app:srcCompat="@drawable/ic_power"
+                        app:tint="@android:color/white"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Sfkt.ConnectButton"
+                        app:elevation="6dp"
+                        app:pressedTranslationZ="10dp"
+                        style="@style/Widget.Material3.FloatingActionButton.Primary"/>
+
+                </FrameLayout>
+
+                <!-- Status Text -->
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/disconnected"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:textStyle="bold"/>
+
+                <!-- Connection Time -->
+                <TextView
+                    android:id="@+id/tvConnectionTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:visibility="gone"/>
+
+                <!-- Current Server Info -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/currentServerCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp"
+                    style="@style/Widget.Material3.CardView.Filled">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_server"
+                            app:tint="?attr/colorPrimary"
+                            android:contentDescription="@null"/>
+
+                        <TextView
+                            android:id="@+id/tvCurrentServer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:textColor="?attr/colorOnSurfaceVariant"/>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- Subscription Info Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/subscriptionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp"
+                style="@style/Widget.Material3.CardView.Elevated">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Header with Premium Badge -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="4dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/subscription"
+                                android:textAppearance="?attr/textAppearanceTitleMedium"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:id="@+id/tvSubscriptionDays"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="30 дней"
+                                android:textAppearance="?attr/textAppearanceBodyMedium"
+                                android:textColor="?attr/colorPrimary"/>
+
+                        </LinearLayout>
+
+                        <!-- Premium Badge -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/premiumBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeWidth="0dp"
+                            app:cardBackgroundColor="?attr/colorPrimaryContainer">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:text="Premium"
+                                android:textAppearance="?attr/textAppearanceLabelMedium"
+                                android:textStyle="bold"
+                                android:textColor="?attr/colorOnPrimaryContainer"/>
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </LinearLayout>
+
+                    <!-- Traffic Section (hidden for premium) -->
+                    <LinearLayout
+                        android:id="@+id/trafficSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="8dp"
+                        android:visibility="visible">
+
+                        <!-- Traffic Usage -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/tvTrafficUsed"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="0 GB"
+                                android:textAppearance="?attr/textAppearanceTitleLarge"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:id="@+id/tvTrafficLimit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="/ 10 GB"
+                                android:textAppearance="?attr/textAppearanceBodyLarge"
+                                android:textColor="?attr/colorOnSurfaceVariant"/>
+
+                        </LinearLayout>
+
+                        <!-- Progress Bar -->
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:id="@+id/progressTraffic"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:layout_marginTop="12dp"
+                            app:trackCornerRadius="4dp"
+                            app:indicatorColor="?attr/colorPrimary"
+                            app:trackColor="?attr/colorSurfaceVariant"
+                            app:trackThickness="8dp"
+                            android:progress="0"
+                            android:max="100"/>
+
+                        <!-- Traffic Label -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/traffic_used"
+                            android:textAppearance="?attr/textAppearanceLabelMedium"
+                            android:textColor="?attr/colorOnSurfaceVariant"/>
+
+                    </LinearLayout>
+
+                    <!-- Manage Subscription Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnManageSubscription"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/manage_subscription"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_telegram"
+                        app:iconGravity="start"
+                        app:cornerRadius="12dp"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Split Tunneling Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSplitTunneling"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/split_tunneling"
+                android:textAllCaps="false"
+                app:icon="@drawable/baseline_alt_route"
+                app:iconGravity="textStart"
+                app:iconPadding="12dp"
+                app:cornerRadius="12dp"
+                style="@style/Widget.Material3.Button.TonalButton"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

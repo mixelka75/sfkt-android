@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Connect Button Shape - Fully Rounded -->
+    <style name="ShapeAppearance.Sfkt.ConnectButton" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- Server Card Shape -->
+    <style name="ShapeAppearance.Sfkt.ServerCard" parent="ShapeAppearance.Material3.Corner.Large">
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <!-- Medium Rounded Shape -->
+    <style name="ShapeAppearance.Sfkt.MediumRounded" parent="ShapeAppearance.Material3.Corner.Medium">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <!-- Large Rounded Shape -->
+    <style name="ShapeAppearance.Sfkt.LargeRounded" parent="ShapeAppearance.Material3.Corner.Large">
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <!-- Extra Large Rounded Shape -->
+    <style name="ShapeAppearance.Sfkt.ExtraLargeRounded" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
+        <item name="cornerSize">28dp</item>
+    </style>
+
+    <!-- Pill Shape for chips and badges -->
+    <style name="ShapeAppearance.Sfkt.Pill" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- Custom Button Style -->
+    <style name="Widget.Sfkt.Button.Filled" parent="Widget.Material3.Button">
+        <item name="cornerRadius">16dp</item>
+        <item name="android:minHeight">56dp</item>
+    </style>
+
+    <style name="Widget.Sfkt.Button.Tonal" parent="Widget.Material3.Button.TonalButton">
+        <item name="cornerRadius">16dp</item>
+        <item name="android:minHeight">56dp</item>
+    </style>
+
+    <style name="Widget.Sfkt.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="cornerRadius">16dp</item>
+        <item name="android:minHeight">56dp</item>
+    </style>
+
+    <!-- Custom Card Styles -->
+    <style name="Widget.Sfkt.CardView.Filled" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">20dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+
+    <style name="Widget.Sfkt.CardView.Outlined" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">20dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <!-- Search Bar Style -->
+    <style name="Widget.Sfkt.SearchBar" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">28dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
+    <!-- Stats Card Style -->
+    <style name="Widget.Sfkt.StatsCard" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">24dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
+    <!-- Text Input Style -->
+    <style name="Widget.Sfkt.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+    </style>
+
+    <!-- Bottom Navigation Indicator -->
+    <style name="Widget.Sfkt.BottomNavIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">?attr/colorPrimaryContainer</item>
+        <item name="android:width">56dp</item>
+        <item name="android:height">28dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Sfkt.Pill</item>
+    </style>
+
+    <!-- Ping Chip Styles -->
+    <style name="Widget.Sfkt.Chip.Ping" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipCornerRadius">16dp</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipMinHeight">32dp</item>
+    </style>
+
+    <style name="Widget.Sfkt.Chip.Ping.Good" parent="Widget.Sfkt.Chip.Ping">
+        <item name="chipBackgroundColor">@color/ping_good</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Widget.Sfkt.Chip.Ping.Medium" parent="Widget.Sfkt.Chip.Ping">
+        <item name="chipBackgroundColor">@color/ping_medium</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Widget.Sfkt.Chip.Ping.Bad" parent="Widget.Sfkt.Chip.Ping">
+        <item name="chipBackgroundColor">@color/ping_bad</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>

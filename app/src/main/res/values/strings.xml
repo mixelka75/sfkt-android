@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">sfkt</string>
+    <string name="appName">sfkt</string>
+
+    <!-- Setup Screen -->
+    <string name="setup_subtitle">Безопасный VPN</string>
+    <string name="get_credentials">Получить данные для подключения</string>
+    <string name="subscription_url">Ссылка подписки</string>
+    <string name="get_servers">Получить сервера</string>
+    <string name="loading">Загрузка…</string>
+
+    <!-- Main Screen -->
+    <string name="connect">Подключиться</string>
+    <string name="disconnect">Отключиться</string>
+    <string name="connected">Подключено</string>
+    <string name="disconnected">Отключено</string>
+    <string name="connecting">Подключение…</string>
+    <string name="home">Главная</string>
+    <string name="servers">Сервера</string>
+    <string name="refresh">Обновить</string>
+    <string name="download">Загрузка</string>
+    <string name="upload">Отдача</string>
+
+    <!-- Subscription Info -->
+    <string name="subscription">Подписка</string>
+    <string name="traffic_used">Использовано трафика</string>
+    <string name="unlimited">Безлимит</string>
+    <string name="days_left">Осталось дней</string>
+    <string name="manage_subscription">Управление подпиской</string>
+
+    <!-- Menu -->
+    <string name="split_tunneling">Исключения</string>
+    <string name="logout">Выйти</string>
+
+    <!-- Split Tunneling -->
+    <string name="search">Поиск</string>
+    <string name="apps_routing">Исключения приложений</string>
+    <string name="apps_routing_subtitle">Выберите приложения, которые НЕ будут использовать VPN</string>
+    <string name="appsRoutingSave">Сохранить</string>
+    <string name="appsRoutingExcludeMode">Режим: Исключить</string>
+    <string name="appsRoutingIncludeMode">Режим: Включить</string>
+
+    <!-- VPN Service -->
+    <string name="vpn_notification_title">VPN подключен</string>
+    <string name="vpn_notification_tap_to_open">Нажмите для открытия</string>
+    <string name="vpn_notification_protected">Ваше соединение защищено</string>
+    <string name="vpn_stop">Отключить</string>
+    <string name="vpnStart">Подключить</string>
+    <string name="vpnStop">Отключить</string>
+
+    <!-- Quick Settings Tile -->
+    <string name="tile_vpn_name">sfkt VPN</string>
+    <string name="tile_no_server">Нет сервера</string>
+
+    <!-- Errors -->
+    <string name="error_no_servers">Сервера не найдены</string>
+    <string name="error_connection">Ошибка подключения</string>
+    <string name="error_subscription">Ошибка загрузки подписки</string>
+    <string name="error_invalid_url">Неверный URL</string>
+
+    <!-- Misc -->
+    <string name="ok">OK</string>
+    <string name="cancel">Отмена</string>
+    <string name="noValue">-</string>
+    <string name="appIcon">App Icon</string>
+
+    <!-- Legacy strings for compatibility -->
+    <string name="refreshLinks">Обновить</string>
+    <string name="newProfile">New Profile</string>
+    <string name="scanQrCode">Scan QrCode</string>
+    <string name="fromClipboard">From Clipboard</string>
+</resources>
