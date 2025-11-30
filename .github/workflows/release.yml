@@ -1,0 +1,100 @@
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r28b
+
+      - name: Build XrayCore
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: |
+          cd XrayCore
+          go mod init XrayCore
+          go mod edit -replace github.com/xtls/xray-core=./Xray-core
+          go mod edit -replace github.com/xtls/libxray=./libXray
+          go mod tidy
+          VERSION=$(awk -F ' ' '/golang.org\/x\/mobile/ {print $2}' go.mod)
+          go install golang.org/x/mobile/cmd/gomobile@$VERSION
+          go mod download
+          gomobile init
+          gomobile bind -o "../app/libs/XrayCore.aar" -androidapi 26 -target "android" -ldflags="-buildid=" -trimpath
+
+      - name: Setup Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /tmp/xray.jks
+
+      - name: Build APKs
+        env:
+          KS_PASSWORD: ${{ secrets.KS_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease -PabiTarget=armeabi-v7a,arm64-v8a,x86,x86_64 -PuniversalApk=true
+
+      - name: Rename APKs
+        run: |
+          cd app/build/outputs/apk/release
+          VERSION="${GITHUB_REF_NAME:-dev}"
+          for f in *.apk; do
+            name="${f%.apk}"
+            arch="${name##*-}"
+            if [ "$arch" = "universal" ]; then
+              mv "$f" "SafeKitty-${VERSION}-universal.apk"
+            else
+              mv "$f" "SafeKitty-${VERSION}-${arch}.apk"
+            fi
+          done
+          ls -la
+
+      - name: Upload APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: apks
+          path: app/build/outputs/apk/release/*.apk
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app/build/outputs/apk/release/*.apk
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

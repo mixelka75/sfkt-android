@@ -6,6 +6,7 @@ plugins {
 }
 
 val abiTarget: String by project
+val universalApk: String by project
 
 android {
     namespace = "wtf.mxl.sfkt"
@@ -45,7 +46,7 @@ android {
     splits {
         abi {
             isEnable = true
-            isUniversalApk = false
+            isUniversalApk = universalApk.toBoolean()
             reset()
             //noinspection ChromeOsAbiSupport
             include(*abiTarget.split(",").toTypedArray())
