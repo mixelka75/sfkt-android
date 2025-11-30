@@ -47,7 +47,8 @@ jobs:
         run: |
           cd XrayCore
           go mod tidy
-          go install golang.org/x/mobile/cmd/gomobile@latest
+          go install golang.org/x/mobile/cmd/gomobile@v0.0.0-20251009145931-8baca8bf4eeb
+          go get golang.org/x/mobile/bind@v0.0.0-20251009145931-8baca8bf4eeb
           go mod download
           gomobile init
           gomobile bind -o "../app/libs/XrayCore.aar" -androidapi 26 -target "android" -ldflags="-buildid=" -trimpath
