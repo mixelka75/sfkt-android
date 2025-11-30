@@ -46,9 +46,6 @@ jobs:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
           cd XrayCore
-          go mod init XrayCore
-          go mod edit -replace github.com/xtls/xray-core=./Xray-core
-          go mod edit -replace github.com/xtls/libxray=./libXray
           go mod tidy
           VERSION=$(awk -F ' ' '/golang.org\/x\/mobile/ {print $2}' go.mod)
           go install golang.org/x/mobile/cmd/gomobile@$VERSION
