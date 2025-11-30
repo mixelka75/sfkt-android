@@ -1,33 +1,39 @@
 package wtf.mxl.sfkt.ui.main
 
-import android.animation.AnimatorSet
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.net.VpnService
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AnimationUtils
 import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.MaterialColors
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import wtf.mxl.sfkt.R
 import wtf.mxl.sfkt.Settings
 import wtf.mxl.sfkt.databinding.FragmentHomeBinding
+import wtf.mxl.sfkt.service.ConnectionMonitor
 import wtf.mxl.sfkt.service.SfktVpnService
 import wtf.mxl.sfkt.ui.settings.AppsRoutingActivity
 
@@ -39,12 +45,26 @@ class HomeFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var settings: Settings
 
+    private var connectionMonitor: ConnectionMonitor? = null
+    private var isFailoverInProgress = false
+
+    companion object {
+        private const val FAILOVER_NOTIFICATION_CHANNEL_ID = "sfkt_failover_channel"
+        private const val FAILOVER_NOTIFICATION_ID = 100
+    }
+
     private val vpnPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == android.app.Activity.RESULT_OK) {
             startVpn()
         }
+    }
+
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        // Permission result handled, continue regardless
     }
 
     private val vpnReceiver = object : BroadcastReceiver() {
@@ -54,10 +74,20 @@ class HomeFragment : Fragment() {
                     viewModel.setVpnState(MainViewModel.VpnState.CONNECTED)
                     updateUI(MainViewModel.VpnState.CONNECTED)
                     syncSelectedServerWithActive()
+                    startConnectionMonitoring()
+
+                    if (isFailoverInProgress) {
+                        isFailoverInProgress = false
+                        viewModel.resetFailoverIndex()
+                        connectionMonitor?.resetFailureCount()
+                        val serverName = intent.getStringExtra("server") ?: ""
+                        showSnackbar(getString(R.string.failover_success, serverName))
+                    }
                 }
                 SfktVpnService.STOP_VPN_SERVICE_ACTION_NAME -> {
                     viewModel.setVpnState(MainViewModel.VpnState.DISCONNECTED)
                     updateUI(MainViewModel.VpnState.DISCONNECTED)
+                    stopConnectionMonitoring()
                 }
                 SfktVpnService.STATUS_VPN_SERVICE_ACTION_NAME -> {
                     val isRunning = intent.getBooleanExtra("isRunning", false)
@@ -66,6 +96,9 @@ class HomeFragment : Fragment() {
                     updateUI(state)
                     if (isRunning) {
                         syncSelectedServerWithActive()
+                        startConnectionMonitoring()
+                    } else {
+                        stopConnectionMonitoring()
                     }
                 }
             }
@@ -89,13 +122,27 @@ class HomeFragment : Fragment() {
         observeViewModel()
         registerVpnReceiver()
         animateEntrance()
+        requestNotificationPermission()
 
         // Request VPN status
         SfktVpnService.status(requireContext())
     }
 
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        stopConnectionMonitoring()
         try {
             requireContext().unregisterReceiver(vpnReceiver)
         } catch (_: Exception) {}
@@ -123,6 +170,15 @@ class HomeFragment : Fragment() {
         binding.btnManageSubscription.setOnClickListener {
             openTelegramBot()
         }
+
+        binding.btnPreferredServers.setOnClickListener {
+            showPreferredServersBottomSheet()
+        }
+    }
+
+    private fun showPreferredServersBottomSheet() {
+        PreferredServersBottomSheet.newInstance()
+            .show(childFragmentManager, PreferredServersBottomSheet.TAG)
     }
 
     private fun observeViewModel() {
@@ -362,6 +418,8 @@ class HomeFragment : Fragment() {
         binding.tvStatus.translationY = 30f
         binding.subscriptionCard.alpha = 0f
         binding.subscriptionCard.translationY = 50f
+        binding.btnPreferredServers.alpha = 0f
+        binding.btnPreferredServers.translationY = 50f
         binding.btnSplitTunneling.alpha = 0f
         binding.btnSplitTunneling.translationY = 50f
 
@@ -411,6 +469,14 @@ class HomeFragment : Fragment() {
             .setStartDelay(450)
             .start()
 
+        // Animate preferred servers button
+        binding.btnPreferredServers.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(400)
+            .setStartDelay(500)
+            .start()
+
         // Animate split tunneling button
         binding.btnSplitTunneling.animate()
             .alpha(1f)
@@ -428,5 +494,87 @@ class HomeFragment : Fragment() {
             interpolator = AccelerateDecelerateInterpolator()
             start()
         }
+    }
+
+    // Connection Monitoring & Failover
+    private fun startConnectionMonitoring() {
+        if (!settings.autoFailoverEnabled) return
+        if (connectionMonitor != null) return
+
+        connectionMonitor = ConnectionMonitor(
+            context = requireContext(),
+            onConnectionLost = { performFailover() },
+            onAllAttemptsFailed = { showNoInternetNotification() }
+        )
+        connectionMonitor?.startMonitoring()
+    }
+
+    private fun stopConnectionMonitoring() {
+        connectionMonitor?.stopMonitoring()
+        connectionMonitor?.destroy()
+        connectionMonitor = null
+    }
+
+    private fun performFailover() {
+        if (isFailoverInProgress) return
+        isFailoverInProgress = true
+
+        // Stop monitoring during failover
+        connectionMonitor?.stopMonitoring()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val nextServer = viewModel.getNextFailoverServerBlocking()
+            if (nextServer == null) {
+                isFailoverInProgress = false
+                connectionMonitor?.startMonitoring()
+                return@launch
+            }
+
+            showSnackbar(getString(R.string.switching_to_server, nextServer.name))
+
+            // Set connecting state
+            viewModel.setVpnState(MainViewModel.VpnState.CONNECTING)
+            updateUI(MainViewModel.VpnState.CONNECTING)
+
+            // Select new server
+            viewModel.selectServer(nextServer)
+
+            // Stop current connection
+            SfktVpnService.stop(requireContext())
+
+            // Wait for clean disconnect
+            kotlinx.coroutines.delay(800)
+
+            // Start new connection
+            SfktVpnService.start(requireContext(), nextServer)
+        }
+    }
+
+    private fun showNoInternetNotification() {
+        val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Create channel
+        val channel = NotificationChannel(
+            FAILOVER_NOTIFICATION_CHANNEL_ID,
+            getString(R.string.auto_failover),
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        notificationManager.createNotificationChannel(channel)
+
+        val notification = NotificationCompat.Builder(requireContext(), FAILOVER_NOTIFICATION_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_vpn_key)
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText(getString(R.string.no_internet_warning))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .build()
+
+        notificationManager.notify(FAILOVER_NOTIFICATION_ID, notification)
+
+        showSnackbar(getString(R.string.no_internet_warning))
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 }

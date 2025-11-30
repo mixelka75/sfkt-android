@@ -63,6 +63,14 @@
     <color name="ping_good">#69F0AE</color>
     <color name="ping_medium">#FFD740</color>
     <color name="ping_bad">#FF8A80</color>
+    <color name="ping_none">#9E9E9E</color>
+    <color name="ping_text">#000000</color>
+
+    <!-- Preferred Server Colors (Dark Theme) -->
+    <color name="preferred_server_stroke">#9ECAFF</color>
+    <color name="preferred_server_background">#1E3448</color>
+    <color name="server_stroke_default">#43474E</color>
+    <color name="server_background_default">#121316</color>
 
     <!-- Connect Button State Colors -->
     <color name="connect_button_disconnected">#9ECAFF</color>

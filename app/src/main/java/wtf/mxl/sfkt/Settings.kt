@@ -40,6 +40,27 @@ class Settings(context: Context) {
         get() = prefs.getStringSet("excluded_apps", emptySet()) ?: emptySet()
         set(value) = prefs.edit().putStringSet("excluded_apps", value).apply()
 
+    // Auto-Failover Settings
+    var preferredServerIds: Set<Long>
+        get() = prefs.getStringSet("preferred_server_ids", emptySet())
+            ?.mapNotNull { it.toLongOrNull() }
+            ?.toSet() ?: emptySet()
+        set(value) = prefs.edit()
+            .putStringSet("preferred_server_ids", value.map { it.toString() }.toSet())
+            .apply()
+
+    var autoFailoverEnabled: Boolean
+        get() = prefs.getBoolean("auto_failover_enabled", true)
+        set(value) = prefs.edit().putBoolean("auto_failover_enabled", value).apply()
+
+    var failoverCheckIntervalSeconds: Int
+        get() = prefs.getInt("failover_check_interval", 5)
+        set(value) = prefs.edit().putInt("failover_check_interval", value).apply()
+
+    var maxFailoverAttempts: Int
+        get() = prefs.getInt("max_failover_attempts", 3)
+        set(value) = prefs.edit().putInt("max_failover_attempts", value).apply()
+
     // VPN Settings
     val socksAddress: String get() = "127.0.0.1"
     val socksPort: Int get() = 10808

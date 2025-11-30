@@ -2,6 +2,7 @@ package wtf.mxl.sfkt.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import wtf.mxl.sfkt.R
 import java.net.InetSocketAddress
 import java.net.Socket
 
@@ -22,6 +23,15 @@ object PingUtil {
     }
 
     fun getPingColor(ping: Int?): Int {
+        return when {
+            ping == null -> R.color.ping_none
+            ping < 100 -> R.color.ping_good
+            ping < 200 -> R.color.ping_medium
+            else -> R.color.ping_bad
+        }
+    }
+
+    fun getPingColorValue(ping: Int?): Int {
         return when {
             ping == null -> 0xFF9E9E9E.toInt() // Gray
             ping < 100 -> 0xFF4CAF50.toInt() // Green

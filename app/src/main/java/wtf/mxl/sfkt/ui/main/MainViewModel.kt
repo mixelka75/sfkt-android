@@ -37,6 +37,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _subscriptionInfo = MutableStateFlow<SubscriptionInfo?>(null)
     val subscriptionInfo: StateFlow<SubscriptionInfo?> = _subscriptionInfo
 
+    private val _preferredServerIds = MutableStateFlow(settings.preferredServerIds)
+    val preferredServerIds: StateFlow<Set<Long>> = _preferredServerIds
+
+    private val _failoverEvent = MutableStateFlow<FailoverEvent?>(null)
+    val failoverEvent: StateFlow<FailoverEvent?> = _failoverEvent
+
+    private var currentFailoverIndex = 0
+
     fun refreshSubscriptionInfo() {
         if (settings.subscriptionUrl.isBlank()) return
 
@@ -122,9 +130,95 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Preferred Servers Management
+    fun togglePreferredServer(serverId: Long) {
+        val current = settings.preferredServerIds.toMutableSet()
+        if (current.contains(serverId)) {
+            current.remove(serverId)
+        } else {
+            current.add(serverId)
+        }
+        settings.preferredServerIds = current
+        _preferredServerIds.value = current
+    }
+
+    fun setPreferredServers(serverIds: Set<Long>) {
+        settings.preferredServerIds = serverIds
+        _preferredServerIds.value = serverIds
+    }
+
+    fun isServerPreferred(serverId: Long): Boolean {
+        return _preferredServerIds.value.contains(serverId)
+    }
+
+    suspend fun getPreferredServers(): List<Server> {
+        val allServers = servers.first()
+        val preferredIds = _preferredServerIds.value
+        return if (preferredIds.isEmpty()) {
+            allServers
+        } else {
+            allServers.filter { it.id in preferredIds }
+        }
+    }
+
+    // Failover Logic
+    fun getNextFailoverServer(): Server? {
+        var result: Server? = null
+        viewModelScope.launch {
+            result = getNextFailoverServerBlocking()
+        }
+        return result
+    }
+
+    suspend fun getNextFailoverServerBlocking(): Server? {
+        val preferredServers = getPreferredServers()
+        if (preferredServers.isEmpty()) return null
+
+        val currentServerId = _selectedServerId.value
+        val currentIndex = preferredServers.indexOfFirst { it.id == currentServerId }
+
+        // Get next server in the list (circular)
+        val nextIndex = if (currentIndex == -1) {
+            0
+        } else {
+            (currentIndex + 1) % preferredServers.size
+        }
+
+        val nextServer = preferredServers.getOrNull(nextIndex)
+
+        // If we've cycled through all servers, return null (all failed)
+        if (nextServer?.id == currentServerId && preferredServers.size > 1) {
+            currentFailoverIndex++
+            if (currentFailoverIndex >= preferredServers.size) {
+                currentFailoverIndex = 0
+                return null
+            }
+        }
+
+        return nextServer
+    }
+
+    fun resetFailoverIndex() {
+        currentFailoverIndex = 0
+    }
+
+    fun emitFailoverEvent(event: FailoverEvent) {
+        _failoverEvent.value = event
+    }
+
+    fun clearFailoverEvent() {
+        _failoverEvent.value = null
+    }
+
     enum class VpnState {
         DISCONNECTED,
         CONNECTING,
         CONNECTED
+    }
+
+    sealed class FailoverEvent {
+        data class SwitchingServer(val serverName: String) : FailoverEvent()
+        object NoInternetWarning : FailoverEvent()
+        data class FailoverSuccess(val serverName: String) : FailoverEvent()
     }
 }

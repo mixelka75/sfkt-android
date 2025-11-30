@@ -279,13 +279,28 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Auto-Failover Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPreferredServers"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/preferred_servers"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_autorenew"
+                app:iconGravity="textStart"
+                app:iconPadding="12dp"
+                app:cornerRadius="12dp"
+                style="@style/Widget.Material3.Button.TonalButton"/>
+
             <!-- Split Tunneling Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSplitTunneling"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/split_tunneling"
                 android:textAllCaps="false"
                 app:icon="@drawable/baseline_alt_route"

@@ -61,8 +61,25 @@
     <!-- Misc -->
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="save_with_count">Сохранить (%d)</string>
     <string name="noValue">-</string>
     <string name="appIcon">App Icon</string>
+
+    <!-- Auto-Failover -->
+    <string name="preferred_servers">Авто-переключение</string>
+    <string name="preferred_servers_title">Авто-переключение</string>
+    <string name="preferred_servers_subtitle">Выберите серверы для автоматического переключения при потере соединения</string>
+    <string name="auto_failover">Автопереключение</string>
+    <string name="auto_failover_description">Переключаться на другой сервер при потере интернета</string>
+    <string name="select_preferred_servers">Предпочитаемые серверы</string>
+    <string name="preferred_servers_info">Если не выбрано ни одного сервера, переключение будет происходить между всеми доступными серверами</string>
+    <string name="preferred_servers_saved">Сохранено %d серверов для переключения</string>
+    <string name="preferred_servers_cleared">Будут использоваться все серверы</string>
+    <string name="switching_to_server">Переключение на %s</string>
+    <string name="no_internet_warning">Возможно, устройство не подключено к интернету</string>
+    <string name="failover_success">Подключено к %s</string>
+    <string name="connection_check">Проверка соединения…</string>
 
     <!-- Legacy strings for compatibility -->
     <string name="refreshLinks">Обновить</string>
