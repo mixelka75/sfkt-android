@@ -69,11 +69,11 @@ jobs:
           cd app/build/outputs/apk/release
           VERSION="${GITHUB_REF_NAME:-dev}"
           for f in *.apk; do
-            name="${f%.apk}"
-            arch="${name##*-}"
-            if [ "$arch" = "universal" ]; then
+            if [[ "$f" == *"-universal-"* ]]; then
               mv "$f" "SafeKitty-${VERSION}-universal.apk"
             else
+              # Extract arch from app-{arch}-release.apk
+              arch=$(echo "$f" | sed -E 's/app-(.+)-release\.apk/\1/')
               mv "$f" "SafeKitty-${VERSION}-${arch}.apk"
             fi
           done
