@@ -49,7 +49,7 @@ jobs:
           go get golang.org/x/mobile/bind@v0.0.0-20251009145931-8baca8bf4eeb
           go mod download
           gomobile init
-          gomobile bind -o "../app/libs/XrayCore.aar" -androidapi 26 -target "android" -ldflags="-buildid=" -trimpath
+          gomobile bind -o "../app/libs/XrayCore.aar" -androidapi 26 -target "android/arm,android/arm64,android/386,android/amd64" -ldflags="-buildid=" -trimpath
 
       - name: Setup Keystore
         run: |
