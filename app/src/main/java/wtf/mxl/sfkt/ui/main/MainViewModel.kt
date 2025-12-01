@@ -69,6 +69,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 .onSuccess { newServers ->
                     serverRepository.replaceAll(newServers)
                     settings.lastSubscriptionUpdate = System.currentTimeMillis()
+
+                    // Update preferred servers - remove IDs that no longer exist
+                    val actualServers = serverRepository.getAllServersList()
+                    val actualServerIds = actualServers.map { it.id }.toSet()
+                    val updatedPreferred = _preferredServerIds.value.filter { it in actualServerIds }.toSet()
+                    if (updatedPreferred != _preferredServerIds.value) {
+                        settings.preferredServerIds = updatedPreferred
+                        _preferredServerIds.value = updatedPreferred
+                    }
+
                     measureAllPings()
                 }
                 .onFailure { e ->
@@ -126,6 +136,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             settings.subscriptionUrl = ""
             settings.selectedServerId = -1
             settings.isFirstLaunch = true
+            settings.preferredServerIds = emptySet()
+            _preferredServerIds.value = emptySet()
             serverRepository.deleteAll()
         }
     }

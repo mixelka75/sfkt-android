@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import wtf.mxl.sfkt.R
 import wtf.mxl.sfkt.Settings
 import wtf.mxl.sfkt.databinding.ActivityMainBinding
+import wtf.mxl.sfkt.service.SfktVpnService
 import wtf.mxl.sfkt.ui.setup.SetupActivity
 
 class MainActivity : AppCompatActivity() {
@@ -21,9 +22,9 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
-    private val homeFragment = HomeFragment()
-    private val serversFragment = ServersFragment()
-    private var activeFragment: Fragment = homeFragment
+    private lateinit var homeFragment: HomeFragment
+    private lateinit var serversFragment: ServersFragment
+    private lateinit var activeFragment: Fragment
     private var currentFragmentIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupToolbar()
-        setupFragments()
+        setupFragments(savedInstanceState)
         setupBottomNavigation()
 
         // Fix bottom navigation padding
@@ -63,6 +64,10 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setOnMenuItemClickListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.action_logout -> {
+                    // Stop VPN if connected
+                    if (viewModel.vpnState.value == MainViewModel.VpnState.CONNECTED) {
+                        SfktVpnService.stop(this)
+                    }
                     viewModel.logout()
                     navigateToSetup()
                     true
@@ -72,12 +77,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupFragments() {
-        supportFragmentManager.beginTransaction().apply {
-            add(R.id.navHostFragment, homeFragment, "home")
-            add(R.id.navHostFragment, serversFragment, "servers")
-            hide(serversFragment)
-        }.commit()
+    private fun setupFragments(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) {
+            // Restore existing fragments
+            homeFragment = supportFragmentManager.findFragmentByTag("home") as? HomeFragment ?: HomeFragment()
+            serversFragment = supportFragmentManager.findFragmentByTag("servers") as? ServersFragment ?: ServersFragment()
+
+            // Restore active fragment state
+            currentFragmentIndex = savedInstanceState.getInt("currentFragmentIndex", 0)
+            activeFragment = if (currentFragmentIndex == 0) homeFragment else serversFragment
+
+            // Ensure correct visibility
+            supportFragmentManager.beginTransaction().apply {
+                if (currentFragmentIndex == 0) {
+                    show(homeFragment)
+                    hide(serversFragment)
+                } else {
+                    hide(homeFragment)
+                    show(serversFragment)
+                }
+            }.commitNowAllowingStateLoss()
+        } else {
+            // Create new fragments
+            homeFragment = HomeFragment()
+            serversFragment = ServersFragment()
+            activeFragment = homeFragment
+
+            supportFragmentManager.beginTransaction().apply {
+                add(R.id.navHostFragment, homeFragment, "home")
+                add(R.id.navHostFragment, serversFragment, "servers")
+                hide(serversFragment)
+            }.commit()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("currentFragmentIndex", currentFragmentIndex)
     }
 
     private fun setupBottomNavigation() {

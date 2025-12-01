@@ -88,6 +88,8 @@ class HomeFragment : Fragment() {
                     viewModel.setVpnState(MainViewModel.VpnState.DISCONNECTED)
                     updateUI(MainViewModel.VpnState.DISCONNECTED)
                     stopConnectionMonitoring()
+                    // Refresh subscription when disconnected
+                    viewModel.refreshSubscription()
                 }
                 SfktVpnService.STATUS_VPN_SERVICE_ACTION_NAME -> {
                     val isRunning = intent.getBooleanExtra("isRunning", false)

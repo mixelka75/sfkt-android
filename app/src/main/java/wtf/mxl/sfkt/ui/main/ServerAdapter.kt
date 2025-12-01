@@ -127,18 +127,19 @@ class ServerAdapter(
 
             // Ping chip
             val pingText = PingUtil.formatPing(server.ping)
-            val pingColor = PingUtil.getPingColor(server.ping)
+            val pingColorRes = PingUtil.getPingColor(server.ping)
             binding.chipPing.text = pingText
-            binding.chipPing.chipBackgroundColor = ColorStateList.valueOf(pingColor)
-            binding.chipPing.setTextColor(
-                if (server.ping in 1..150) {
-                    ContextCompat.getColor(context, R.color.white)
-                } else if (server.ping in 151..300) {
-                    ContextCompat.getColor(context, R.color.black)
-                } else {
-                    ContextCompat.getColor(context, R.color.white)
-                }
+            binding.chipPing.chipBackgroundColor = ColorStateList.valueOf(
+                ContextCompat.getColor(context, pingColorRes)
             )
+            // Text color: white for good/bad/none, black for medium (yellow/orange)
+            val textColor = when {
+                server.ping == null -> R.color.white
+                server.ping < 100 -> R.color.white  // Good (green)
+                server.ping < 200 -> R.color.black  // Medium (yellow/orange)
+                else -> R.color.white               // Bad (red)
+            }
+            binding.chipPing.setTextColor(ContextCompat.getColor(context, textColor))
 
             binding.root.setOnClickListener {
                 animateClick(binding.serverCard)

@@ -47,19 +47,18 @@ class PreferredServerAdapter(
             binding.checkboxServer.isChecked = item.isPreferred
 
             // Ping chip
-            if (server.ping != null) {
-                binding.chipPing.text = "${server.ping}ms"
-                binding.chipPing.chipBackgroundColor = ColorStateList.valueOf(
-                    ContextCompat.getColor(context, PingUtil.getPingColor(server.ping))
-                )
-            } else {
-                binding.chipPing.text = "-"
-                binding.chipPing.chipBackgroundColor = ColorStateList.valueOf(
-                    ContextCompat.getColor(context, R.color.ping_none)
-                )
+            binding.chipPing.text = PingUtil.formatPing(server.ping)
+            binding.chipPing.chipBackgroundColor = ColorStateList.valueOf(
+                ContextCompat.getColor(context, PingUtil.getPingColor(server.ping))
+            )
+            // Text color: white for good/bad/none, black for medium (yellow/orange)
+            val textColor = when {
+                server.ping == null -> R.color.white
+                server.ping < 100 -> R.color.white  // Good (green)
+                server.ping < 200 -> R.color.black  // Medium (yellow/orange)
+                else -> R.color.white               // Bad (red)
             }
-            // Set dark text color for better contrast on colored backgrounds
-            binding.chipPing.setTextColor(ContextCompat.getColor(context, R.color.ping_text))
+            binding.chipPing.setTextColor(ContextCompat.getColor(context, textColor))
 
             // Card styling based on selection
             if (item.isPreferred) {
