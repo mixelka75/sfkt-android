@@ -37,8 +37,8 @@ class Settings(context: Context) {
 
     // Split Tunneling
     var excludedApps: Set<String>
-        get() = prefs.getStringSet("excluded_apps", emptySet()) ?: emptySet()
-        set(value) = prefs.edit().putStringSet("excluded_apps", value).apply()
+        get() = prefs.getStringSet("excluded_apps", emptySet())?.toSet() ?: emptySet()
+        set(value) = prefs.edit().putStringSet("excluded_apps", HashSet(value)).apply()
 
     // Auto-Failover Settings
     var preferredServerIds: Set<Long>
